@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Mockery as M;
-use Airflix\Movie;
-use Tests\TestCase;
 use Airflix\Contracts;
-use Tmdb\Laravel\Facades\Tmdb;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Airflix\Movie;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Mockery as M;
+use Tests\TestCase;
+use Tmdb\Laravel\Facades\Tmdb;
 
 class MovieRemoteApiTest extends TestCase
 {
@@ -18,7 +18,7 @@ class MovieRemoteApiTest extends TestCase
     protected $imageClient;
     protected $movie;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -28,7 +28,7 @@ class MovieRemoteApiTest extends TestCase
         ]);
 
         $this->imageClient = M::mock(Contracts\TmdbImageClient::class);
-        
+
         app()->instance(
             Contracts\TmdbImageClient::class, $this->imageClient
         );
@@ -72,7 +72,7 @@ class MovieRemoteApiTest extends TestCase
         ];
 
         $response = $this->json('PATCH', $url, $data);
-        
+
         $response->assertStatus(201);
     }
 
@@ -114,13 +114,13 @@ class MovieRemoteApiTest extends TestCase
         ];
 
         $response = $this->json('PATCH', $url, $data);
-        
+
         $response->assertStatus(201);
     }
 
     /** @test */
     public function it_fetches_movie_results()
-    {   
+    {
         $tmdbSearch = M::mock('Tmdb\Api\Search');
         $tmdbSearch->shouldReceive('searchMovies')
             ->once()->andReturn(null);

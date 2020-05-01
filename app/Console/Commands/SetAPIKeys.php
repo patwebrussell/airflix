@@ -41,16 +41,16 @@ class SetAPIKeys extends Command
     {
         $tmdbApiKey = $this->option('tmdb');
 
-        if (!$tmdbApiKey && config('tmdb.api_key') == 'ApplyForAnApiKey') {
+        if (! $tmdbApiKey && config('tmdb.api_key') == 'ApplyForAnApiKey') {
             $tmdbApiKey = $this->ask(
                 'What is your themoviedb.org API key?'
             );
         }
 
-        if($tmdbApiKey) {
+        if ($tmdbApiKey) {
             $this->setKeyInEnvironmentFile(
-                $tmdbApiKey, 
-                $this->laravel['config']['tmdb.api_key'], 
+                $tmdbApiKey,
+                $this->laravel['config']['tmdb.api_key'],
                 'TMDB_API_KEY'
             );
 
@@ -59,7 +59,7 @@ class SetAPIKeys extends Command
             $this->info('TMDB API key ['.$tmdbApiKey.'] set successfully.');
         }
     }
-    
+
     /**
      * Set a variable key in the environment file.
      *
@@ -67,9 +67,10 @@ class SetAPIKeys extends Command
      * @param  string $current
      * @param  string $envKey
      */
-    protected function setKeyInEnvironmentFile($new, $current, $envKey) {
+    protected function setKeyInEnvironmentFile($new, $current, $envKey)
+    {
         file_put_contents(
-            $this->laravel->environmentFilePath(), 
+            $this->laravel->environmentFilePath(),
             str_replace(
                 $envKey.'='.$current,
                 $envKey.'='.$new,

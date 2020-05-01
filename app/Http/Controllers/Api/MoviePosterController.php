@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\MovieImages;
+use Airflix\Contracts\Movies;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Movies;
-use Airflix\Contracts\MovieImages;
 
 class MoviePosterController extends ApiController
 {
@@ -49,7 +49,7 @@ class MoviePosterController extends ApiController
 
         return $this->apiResponse()
             ->respondWithCollection(
-                $posters, 
+                $posters,
                 $transformer
             );
     }

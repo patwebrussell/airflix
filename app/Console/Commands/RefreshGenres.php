@@ -40,7 +40,7 @@ class RefreshGenres extends Command
     {
         $totalGenres = $this->genres()
             ->refreshGenres($this->output);
-        
+
         $this->line(
             '<info>Refreshed:</info> '.
             $totalGenres.' genres '.
@@ -53,7 +53,8 @@ class RefreshGenres extends Command
      *
      * @return \Airflix\Contracts\Genres
      */
-    protected function genres() {
+    protected function genres()
+    {
         return app(Genres::class);
     }
 }

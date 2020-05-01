@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateShowsTable extends Migration
 {
@@ -73,7 +73,7 @@ class CreateShowsTable extends Migration
             $table->integer('total_views')->unsigned()->default(0);
             $table->timestamps();
         });
-        
+
         Schema::create('episode_views', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('show_id')->unsigned();

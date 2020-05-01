@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\Seasons;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Seasons;
 
 class SeasonController extends ApiController
 {
@@ -28,8 +28,8 @@ class SeasonController extends ApiController
     public function show($id)
     {
         $relationships = [
-            'episodes', 
-            'show', 
+            'episodes',
+            'show',
             'show.genres',
             'views',
         ];
@@ -43,10 +43,10 @@ class SeasonController extends ApiController
         $this->apiResponse()
             ->fractal()
             ->parseIncludes($relationships);
-        
+
         return $this->apiResponse()
             ->respondWithItem(
-                $season, 
+                $season,
                 $transformer
             );
     }

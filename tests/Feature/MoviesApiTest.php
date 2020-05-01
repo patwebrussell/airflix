@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Mockery as M;
+use Airflix\Contracts;
 use Airflix\Genre;
 use Airflix\Movie;
-use Tests\TestCase;
-use Airflix\Contracts;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Mockery as M;
+use Tests\TestCase;
 
 class MoviesApiTest extends TestCase
 {
@@ -19,7 +19,7 @@ class MoviesApiTest extends TestCase
     protected $genre;
     protected $movie;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -39,7 +39,7 @@ class MoviesApiTest extends TestCase
     public function it_fetches_movies()
     {
         $response = $this->json('GET', '/api/movies');
-        
+
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'id' => $this->movie->uuid,
@@ -48,9 +48,9 @@ class MoviesApiTest extends TestCase
             'id' => $this->genre->uuid,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -67,9 +67,9 @@ class MoviesApiTest extends TestCase
             'id' => $this->movie->uuid,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -78,7 +78,7 @@ class MoviesApiTest extends TestCase
     public function it_fetches_movies_with_genre()
     {
         $url = '/api/movies?genre='.$this->genre->uuid;
-        
+
         $response = $this->json('GET', $url);
 
         $response->assertStatus(200);
@@ -86,9 +86,9 @@ class MoviesApiTest extends TestCase
             'id' => $this->genre->uuid,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -104,9 +104,9 @@ class MoviesApiTest extends TestCase
             'id' => $this->genre->uuid,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -129,8 +129,8 @@ class MoviesApiTest extends TestCase
                     'genres',
                     'views',
                 ],
-            ], 
-            'included', 
+            ],
+            'included',
             'meta',
         ]);
     }

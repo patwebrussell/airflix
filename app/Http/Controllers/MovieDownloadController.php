@@ -32,7 +32,7 @@ class MovieDownloadController extends Controller
      *
      * @param  string $id
      *
-     * @return \Illuminate\Http\RedirectResponse 
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function show($id)
     {
@@ -43,14 +43,14 @@ class MovieDownloadController extends Controller
         }*/
 
         // PAT: Check if the file is reachable
-        if (!file_exists($movie->folder_path)){
+        if (! file_exists($movie->folder_path)) {
             return abort(404);
         }
 
         $this->views()->watch($movie);
 
         $stream_link = explode('public/downloads', $movie->folder_path);
-        
+
         // PAT: TO-DO will need a better way of serving the movie (HTML5)
         return redirect('downloads'.$stream_link[1]);
     }

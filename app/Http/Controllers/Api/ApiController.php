@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Airflix\Contracts\ApiResponse;
+use App\Http\Controllers\Controller;
 
 class ApiController extends Controller
 {
@@ -18,7 +18,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Test if request structure is valid JSON-API
+     * Test if request structure is valid JSON-API.
      *
      * @param  array $input
      *
@@ -33,7 +33,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Test if request id and type are valid
+     * Test if request id and type are valid.
      *
      * @param  array $input
      * @param  string $id

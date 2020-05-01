@@ -19,11 +19,11 @@ class HistoryController extends ApiController
      */
     public function delete(Request $request)
     {
-        if(isset($request['all'])) {
+        if (isset($request['all'])) {
             $this->dispatch(new ClearHistory());
         } else {
             $this->dispatch(new ClearHistoryToday());
-        }       
+        }
 
         return $this->apiResponse()
             ->respondWithArray([]);

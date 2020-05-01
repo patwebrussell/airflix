@@ -4,9 +4,9 @@ namespace App\Jobs;
 
 use App\Jobs\Job;
 use Artisan;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class RefreshNew extends Job implements ShouldQueue
 {
@@ -31,10 +31,10 @@ class RefreshNew extends Job implements ShouldQueue
     {
         Artisan::call('airflix:genres');
         Artisan::call('airflix:movies', [
-            '--new' => true
+            '--new' => true,
         ]);
         Artisan::call('airflix:shows', [
-            '--new' => true
+            '--new' => true,
         ]);
     }
 }

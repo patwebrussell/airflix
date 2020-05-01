@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use Airflix\Genre;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Tests\TestCase;
 
 class GenresApiTest extends TestCase
 {
@@ -14,7 +14,7 @@ class GenresApiTest extends TestCase
 
     protected $genre;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 

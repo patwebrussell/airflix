@@ -46,7 +46,7 @@ class SetFolderPaths extends Command
         $refresh = $this->option('refresh');
         $pathChanged = false;
 
-        if($moviesPath && is_dir($moviesPath)) {
+        if ($moviesPath && is_dir($moviesPath)) {
             $moviesPathChanged = $this->settings()
                 ->setMoviesFolderPath($moviesPath);
 
@@ -60,7 +60,7 @@ class SetFolderPaths extends Command
             $pathChanged = $pathChanged || $moviesPathChanged;
         }
 
-        if($showsPath && is_dir($showsPath)) {
+        if ($showsPath && is_dir($showsPath)) {
             $showsPathChanged = $this->settings()
                 ->setShowsFolderPath($showsPath);
 
@@ -69,26 +69,27 @@ class SetFolderPaths extends Command
                 'Shows path ['.$showsPath.'] set successfully.' :
                 '<comment>No Change:</comment> '.
                 'Shows path ['.$showsPath.'] already set.'
-            ); 
+            );
 
             $pathChanged = $pathChanged || $showsPathChanged;
         }
 
-        if(!$moviesPath && !$showsPath) {
+        if (! $moviesPath && ! $showsPath) {
             $this->line(
                 '<error>Error:</error> '.
                 'Please provide at least one path option (--movies or --shows).'
             );
+
             return 1;
         }
 
-        if($refresh) {
+        if ($refresh) {
             $this->call('airflix:genres');
             $this->call('airflix:movies');
             $this->call('airflix:shows');
         }
 
-        if($pathChanged) {
+        if ($pathChanged) {
             return 255;
         }
     }
@@ -98,7 +99,8 @@ class SetFolderPaths extends Command
      *
      * @return \Airflix\Contracts\Settings
      */
-    protected function settings() {
+    protected function settings()
+    {
         return app(Settings::class);
     }
 }

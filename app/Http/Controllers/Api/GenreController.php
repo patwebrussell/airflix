@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\Genres;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Genres;
 
 class GenreController extends ApiController
 {

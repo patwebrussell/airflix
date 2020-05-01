@@ -14,7 +14,7 @@ class ImageDownloadController extends Controller
      * @param  \League\Glide\Server $server
      * @param  \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Http\Response
      */
     public function show($path, Server $server, Request $request)
     {

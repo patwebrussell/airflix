@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Airflix\Show;
-use Mockery as M;
-use Airflix\Genre;
-use Tests\TestCase;
 use Airflix\Contracts;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Airflix\Genre;
+use Airflix\Show;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Mockery as M;
+use Tests\TestCase;
 
 class ShowsApiTest extends TestCase
 {
@@ -19,7 +19,7 @@ class ShowsApiTest extends TestCase
     protected $genre;
     protected $show;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -48,9 +48,9 @@ class ShowsApiTest extends TestCase
             'name' => $this->genre->name,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -67,9 +67,9 @@ class ShowsApiTest extends TestCase
             'name' => $this->show->name,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -86,9 +86,9 @@ class ShowsApiTest extends TestCase
             'name' => $this->genre->name,
         ]);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -102,9 +102,9 @@ class ShowsApiTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'data', 
-            'included', 
-            'meta', 
+            'data',
+            'included',
+            'meta',
             'links',
         ]);
     }
@@ -127,8 +127,8 @@ class ShowsApiTest extends TestCase
                     'genres',
                     'views',
                 ],
-            ], 
-            'included', 
+            ],
+            'included',
             'meta',
         ]);
     }

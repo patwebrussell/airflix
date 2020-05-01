@@ -10,7 +10,7 @@ class HomeController extends Controller
     /**
      * Get the home page.
      *
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {

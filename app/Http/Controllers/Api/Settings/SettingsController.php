@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Settings;
 
+use Airflix\Contracts\Settings;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests;
 use App\Jobs\RefreshAll;
-use Airflix\Contracts\Settings;
 use Artisan;
 use Illuminate\Http\Request;
 
@@ -45,10 +45,8 @@ class SettingsController extends ApiController
     public function patch(Request $request)
     {
         $this->validate($request, [
-            'data.attributes.movies_folder' =>
-                'required_without:data.attributes.shows_folder|string',
-            'data.attributes.shows_folder' =>
-                'required_without:data.attributes.movies_folder|string',
+            'data.attributes.movies_folder' => 'required_without:data.attributes.shows_folder|string',
+            'data.attributes.shows_folder' => 'required_without:data.attributes.movies_folder|string',
         ]);
 
         $input = $request->input();
