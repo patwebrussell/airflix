@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\Shows;
 use App\Http\Requests;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Shows;
 
 class ShowController extends ApiController
 {
@@ -28,7 +28,7 @@ class ShowController extends ApiController
      */
     public function index(Request $request)
     {
-        $relationships = ['genres',];
+        $relationships = ['genres'];
 
         $shows = $this->shows()
             ->index($relationships);
@@ -42,7 +42,7 @@ class ShowController extends ApiController
 
         return $this->apiResponse()
             ->respondWithPaginator(
-                $shows, 
+                $shows,
                 $transformer
             );
     }
@@ -57,7 +57,7 @@ class ShowController extends ApiController
      */
     public function show($id, Request $request)
     {
-        $relationships = ['genres', 'seasons', 'views',];
+        $relationships = ['genres', 'seasons', 'views'];
 
         $includes = (array) array_filter(
             explode(',', $request->input('include')), 'strlen'
@@ -67,17 +67,16 @@ class ShowController extends ApiController
         $show = $this->shows()
             ->get($id, $relationships);
 
-
         $transformer = $this->shows()
             ->transformer();
 
         $this->apiResponse()
             ->fractal()
             ->parseIncludes($includes);
-        
+
         return $this->apiResponse()
             ->respondWithItem(
-                $show, 
+                $show,
                 $transformer
             );
     }
@@ -125,11 +124,11 @@ class ShowController extends ApiController
 
         $transformer = $this->shows()
             ->transformer();
-        
+
         return $this->apiResponse()
             ->setStatusCode(201)
             ->respondWithItem(
-                $show, 
+                $show,
                 $transformer
             );
     }

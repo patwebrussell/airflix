@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Airflix\Episode;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Tests\TestCase;
 
 class EpisodeDownloadTest extends TestCase
 {
@@ -14,7 +14,7 @@ class EpisodeDownloadTest extends TestCase
 
     protected $episode;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -25,7 +25,7 @@ class EpisodeDownloadTest extends TestCase
     public function it_fails_to_download_a_episode()
     {
         $response = $this->get('/downloads/episodes/'.$this->episode->uuid);
-        
+
         $response->assertStatus(404);
     }
 }

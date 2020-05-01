@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\ShowImages;
+use Airflix\Contracts\Shows;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Shows;
-use Airflix\Contracts\ShowImages;
 
 class ShowBackdropController extends ApiController
 {
@@ -49,7 +49,7 @@ class ShowBackdropController extends ApiController
 
         return $this->apiResponse()
             ->respondWithCollection(
-                $backdrops, 
+                $backdrops,
                 $transformer
             );
     }

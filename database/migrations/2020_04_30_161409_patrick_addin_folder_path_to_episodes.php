@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class PatrickAddinFolderPathToEpisodes extends Migration
 {
@@ -13,7 +13,7 @@ class PatrickAddinFolderPathToEpisodes extends Migration
      */
     public function up()
     {
-        Schema::table('episodes', function($table) {
+        Schema::table('episodes', function ($table) {
             $table->string('folder_path');
         });
     }

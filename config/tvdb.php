@@ -33,5 +33,5 @@ return [
     |
     */
 
-    'user_key' => env('TVDB_USER_KEY', null)
+    'user_key' => env('TVDB_USER_KEY', null),
 ];

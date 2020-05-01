@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use Airflix\Season;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Tests\TestCase;
 
 class SeasonsApiTest extends TestCase
 {
@@ -14,7 +14,7 @@ class SeasonsApiTest extends TestCase
 
     protected $season;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -37,8 +37,8 @@ class SeasonsApiTest extends TestCase
                     'show',
                     'views',
                 ],
-            ], 
-            'included', 
+            ],
+            'included',
             'meta',
         ]);
     }

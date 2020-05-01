@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\MovieResults;
+use Airflix\Contracts\Movies;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Movies;
-use Airflix\Contracts\MovieResults;
 
 class MovieResultController extends ApiController
 {
@@ -53,7 +53,7 @@ class MovieResultController extends ApiController
 
         return $this->apiResponse()
             ->respondWithPaginator(
-                $results, 
+                $results,
                 $transformer
             );
     }

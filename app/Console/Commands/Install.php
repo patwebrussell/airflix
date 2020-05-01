@@ -41,7 +41,7 @@ class Install extends Command
      */
     public function handle()
     {
-        $this->info("     _    ___ ____  _____ _     _____  __ ");
+        $this->info('     _    ___ ____  _____ _     _____  __ ');
         $this->info("    / \  |_ _|  _ \|  ___| |   |_ _\ \/ / ");
         $this->info("   / _ \  | || |_) | |_  | |    | | \  /  ");
         $this->info("  / ___ \ | ||  _ <|  _| | |___ | | /  \  ");
@@ -57,7 +57,7 @@ class Install extends Command
 
         $moviesPath = $this->option('movies');
 
-        if (!$moviesPath && !is_link(public_path('downloads/movies'))) {
+        if (! $moviesPath && ! is_link(public_path('downloads/movies'))) {
             $moviesPath = $this->ask(
                 'What is the folder path to your movies?'
             );
@@ -66,13 +66,13 @@ class Install extends Command
         if ($moviesPath) {
             $this->call('airflix:folders', [
                 '--movies' => $moviesPath,
-                '--refresh' => false
+                '--refresh' => false,
             ]);
         }
-        
+
         $showsPath = $this->option('shows');
 
-        if (!$showsPath && !is_link(public_path('downloads/episodes'))) {
+        if (! $showsPath && ! is_link(public_path('downloads/episodes'))) {
             $showsPath = $this->ask(
                 'What is the folder path to your TV Shows?'
             );
@@ -81,7 +81,7 @@ class Install extends Command
         if ($showsPath) {
             $this->call('airflix:folders', [
                 '--shows' => $showsPath,
-                '--refresh' => false
+                '--refresh' => false,
             ]);
         }
 
@@ -91,7 +91,7 @@ class Install extends Command
 
         $tmdbApiKey = $this->option('tmdb');
 
-        if (!$tmdbApiKey && config('tmdb.api_key') == 'ApplyForAnApiKey') {
+        if (! $tmdbApiKey && config('tmdb.api_key') == 'ApplyForAnApiKey') {
             $tmdbApiKey = $this->ask(
                 'What is your themoviedb.org API key?'
             );

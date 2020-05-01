@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use League\Glide\ServerFactory;
 use League\Glide\Responses\LaravelResponseFactory;
+use League\Glide\ServerFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -60,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
             'TmdbImageClient',
         ]);
 
-        $resources->each(function($resource) use ($namespace) {
+        $resources->each(function ($resource) use ($namespace) {
             $abstract = $namespace.'Contracts\\'.$resource;
             $concrete = $namespace.$resource;
 
@@ -84,7 +84,7 @@ class AppServiceProvider extends ServiceProvider
             'TmdbShowResultTransformer',
         ]);
 
-        $transformers->each(function($resource) use ($namespace) {
+        $transformers->each(function ($resource) use ($namespace) {
             $abstract = $namespace.'Contracts\\'.$resource;
             $concrete = $this->mapVersion($namespace, $resource);
 
@@ -105,20 +105,20 @@ class AppServiceProvider extends ServiceProvider
     {
         // Retrieve the Accept header from the Request
         $mimeType = request()->server('HTTP_ACCEPT', '*/*');
-        
+
         // Try to load the requested version, if provided
         $version = $this->parseMimeType($mimeType);
 
-        $classPath = $version ? 
+        $classPath = $version ?
             $this->formatPath($namespace, $version, $resource) : null;
 
         // Requested version exists for this resource
         if ($classPath && class_exists($classPath)) {
             return $classPath;
         }
-        
+
         // Map the latest version of the resource
-        $versions = (array) config('airflix.api.versions', [1.0, ]);
+        $versions = (array) config('airflix.api.versions', [1.0]);
 
         // Reverse sort of the API versions
         rsort($versions);
@@ -157,7 +157,7 @@ class AppServiceProvider extends ServiceProvider
             )
         );
 
-        return $mimeParts->reduce(function($carry, $part) {
+        return $mimeParts->reduce(function ($carry, $part) {
             if (starts_with(trim($part), 'version=')) {
                 // Remove version= from string
                 $version = str_replace('version=', '', trim($part));
@@ -181,12 +181,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return string
      */
-    protected function formatPath($namespace, $version, $resource) {
+    protected function formatPath($namespace, $version, $resource)
+    {
         return $namespace.'V'.$version.'\\'.$resource;
     }
 
     /**
-     * Format a version number to a valid PHP namespace (i.e. 1_1)
+     * Format a version number to a valid PHP namespace (i.e. 1_1).
      *
      * @param  mixed $version
      *
@@ -194,6 +195,6 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function formatVersion($version)
     {
-        return str_replace('.', '_', (double) $version);
+        return str_replace('.', '_', (float) $version);
     }
 }

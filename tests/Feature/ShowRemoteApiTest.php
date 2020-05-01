@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Airflix\Show;
-use Mockery as M;
-use Tests\TestCase;
 use Airflix\Contracts;
-use Tmdb\Laravel\Facades\Tmdb;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Airflix\Show;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Mockery as M;
+use Tests\TestCase;
+use Tmdb\Laravel\Facades\Tmdb;
 
 class ShowRemoteApiTest extends TestCase
 {
@@ -18,7 +18,7 @@ class ShowRemoteApiTest extends TestCase
     protected $imageClient;
     protected $show;
 
-    function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -89,7 +89,7 @@ class ShowRemoteApiTest extends TestCase
         $url = '/api/shows/'.$this->show->uuid.'/posters';
 
         $response = $this->json('GET', $url);
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data',
@@ -131,7 +131,7 @@ class ShowRemoteApiTest extends TestCase
         $url = '/api/shows/'.$this->show->uuid.'/results';
 
         $response = $this->json('GET', $url);
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data',

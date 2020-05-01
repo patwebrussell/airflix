@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateFailedJobsTable extends Migration
 {
@@ -12,7 +12,7 @@ class CreateFailedJobsTable extends Migration
      */
     public function up()
     {
-        Schema::table('movies', function($table) {
+        Schema::table('movies', function ($table) {
             $table->string('file_name');
         });
     }

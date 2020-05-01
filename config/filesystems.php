@@ -42,14 +42,14 @@ return [
     */
 
     'disks' => [
-        
+
         'public' => [
             'driver' => 'local',
             'root' => public_path(),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-        
+
         'app' => [
             'driver' => 'local',
             'root' => storage_path('app'),

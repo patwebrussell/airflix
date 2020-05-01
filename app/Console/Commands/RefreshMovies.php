@@ -66,7 +66,8 @@ class RefreshMovies extends Command
      *
      * @return \Airflix\Contracts\Genres
      */
-    protected function genres() {
+    protected function genres()
+    {
         return app(Genres::class);
     }
 
@@ -75,7 +76,8 @@ class RefreshMovies extends Command
      *
      * @return \Airflix\Contracts\Movies
      */
-    protected function movies() {
+    protected function movies()
+    {
         return app(Movies::class);
     }
 }

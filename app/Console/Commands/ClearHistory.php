@@ -61,7 +61,8 @@ class ClearHistory extends Command
      *
      * @return \Airflix\Contracts\MovieViews
      */
-    protected function movieViews() {
+    protected function movieViews()
+    {
         return app(MovieViews::class);
     }
 
@@ -70,7 +71,8 @@ class ClearHistory extends Command
      *
      * @return \Airflix\Contracts\EpisodeViews
      */
-    protected function episodeViews() {
+    protected function episodeViews()
+    {
         return app(EpisodeViews::class);
     }
 }

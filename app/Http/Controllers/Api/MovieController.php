@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Airflix\Contracts\Movies;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Airflix\Contracts\Movies;
 
 class MovieController extends ApiController
 {
@@ -27,7 +27,7 @@ class MovieController extends ApiController
      */
     public function index(Request $request)
     {
-        $relationships = ['genres',];
+        $relationships = ['genres'];
 
         $movies = $this->movies()
             ->index($relationships);
@@ -56,7 +56,7 @@ class MovieController extends ApiController
      */
     public function show($id, Request $request)
     {
-        $relationships = ['genres', 'views',];
+        $relationships = ['genres', 'views'];
 
         $includes = (array) array_filter(
             explode(',', $request->input('include')), 'strlen'
@@ -72,7 +72,7 @@ class MovieController extends ApiController
         $this->apiResponse()
             ->fractal()
             ->parseIncludes($includes);
-        
+
         return $this->apiResponse()
             ->respondWithItem(
                 $movie,
@@ -123,7 +123,7 @@ class MovieController extends ApiController
 
         $transformer = $this->movies()
             ->transformer();
-        
+
         return $this->apiResponse()
             ->setStatusCode(201)
             ->respondWithItem(

@@ -32,16 +32,14 @@ class EpisodeDownloadController extends Controller
      *
      * @param  string $id
      *
-     * @return \Illuminate\Http\RedirectResponse 
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function show($id)
     {
-
         $episode = $this->episodes()->get($id);
 
-    
         $this->views()->watch($episode);
-        
+
         $stream_link = explode('public/downloads', $episode->folder_path);
         $folder['fold_path'] = $stream_link;
 
@@ -52,6 +50,3 @@ class EpisodeDownloadController extends Controller
         //return redirect('downloads'.$stream_link[1]);
     }
 }
-
-
-

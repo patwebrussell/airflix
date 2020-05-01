@@ -5,7 +5,8 @@ namespace Tests\Unit;
 use Airflix\Retriable;
 use Tests\TestCase;
 
-class RetriesImpl {
+class RetriesImpl
+{
     use Retriable;
 }
 
@@ -13,18 +14,19 @@ class RetriableTest extends TestCase
 {
     private $traitObject;
 
-    function setUp()
+    public function setUp()
     {
         $this->traitObject = new RetriesImpl;
     }
 
     /** @test */
-    function it_retries_without_failing()
+    public function it_retries_without_failing()
     {
         $i = 0;
-        $value = $this->traitObject->retry(1, 
+        $value = $this->traitObject->retry(1,
             function () use (&$i) {
                 $i++;
+
                 return 5;
             });
 
@@ -33,17 +35,18 @@ class RetriableTest extends TestCase
     }
 
     /** @test */
-    function it_retries_failing_once()
+    public function it_retries_failing_once()
     {
         $i = 0;
         $failed = false;
-        $value = $this->traitObject->retry(1, 
+        $value = $this->traitObject->retry(1,
             function () use (&$i, &$failed) {
                 $i++;
-                if (!$failed) {
+                if (! $failed) {
                     $failed = true;
                     throw new \RuntimeException('roflcopter');
                 }
+
                 return 5;
             });
 
@@ -52,12 +55,12 @@ class RetriableTest extends TestCase
     }
 
     /** @test */
-    function it_retries_failing_too_hard()
+    public function it_retries_failing_too_hard()
     {
         $e = null;
         $i = 0;
         try {
-            $this->traitObject->retry(1, 
+            $this->traitObject->retry(1,
                 function () use (&$i) {
                     $i++;
                     throw new \RuntimeException('rofl');
@@ -72,12 +75,12 @@ class RetriableTest extends TestCase
     }
 
     /** @test */
-    function it_retries_many_times()
+    public function it_retries_many_times()
     {
         $e = null;
         $i = 0;
         try {
-            $this->traitObject->retry(1000, 
+            $this->traitObject->retry(1000,
                 function () use (&$i) {
                     $i++;
                     throw new \RuntimeException('dogecoin');

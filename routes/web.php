@@ -14,23 +14,23 @@
 // Glide images
 Route::get('images/{path}', [
     'as' => 'download.images',
-    'uses' => 'ImageDownloadController@show'
+    'uses' => 'ImageDownloadController@show',
 ])->where('path', '.+');
 
 // Episode Downloads
 Route::get('downloads/episodes/{id}', [
     'as' => 'download.episodes',
-    'uses' => 'EpisodeDownloadController@show'
+    'uses' => 'EpisodeDownloadController@show',
 ]);
 
 // Movie Downloads
 Route::get('downloads/movies/{id}', [
     'as' => 'download.movies',
-    'uses' => 'MovieDownloadController@show'
+    'uses' => 'MovieDownloadController@show',
 ]);
 
 // Load the SPA from any route that does not start with __
 Route::get('{path?}', [
     'as' => 'home',
-    'uses' => 'HomeController@index'
+    'uses' => 'HomeController@index',
 ])->where('path', '^(?!__).+');

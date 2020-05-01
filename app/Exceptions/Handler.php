@@ -2,10 +2,10 @@
 
 namespace App\Exceptions;
 
+use Airflix\Contracts\ApiResponse;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Airflix\Contracts\ApiResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return $this->apiResponse()
                 ->renderException($e);
         }
