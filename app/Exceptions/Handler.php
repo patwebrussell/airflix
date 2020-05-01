@@ -2,11 +2,11 @@
 
 namespace App\Exceptions;
 
-use Throwable;
 use Airflix\Contracts\ApiResponse;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
