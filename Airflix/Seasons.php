@@ -90,8 +90,9 @@ class Seasons implements Contracts\Seasons
      *
      * @return \Airflix\Season
      */
-    public function refreshSeason($seasonNumber, $show)
+    public function refreshSeason($seasonNumber, $show, $folder_path)
     {
+        
         $result = $this->retry(3, 
             function () use ($show, $seasonNumber) {
                 return Tmdb::getTvSeasonApi()
@@ -127,8 +128,7 @@ class Seasons implements Contracts\Seasons
 
         foreach ($result['episodes'] as $episode) {
             // Reduce number of API calls and pass the Episode data
-            $episode = $this->episodes()
-                ->refreshEpisode($episode, $show, $season);
+            $episode = $this->episodes()->refreshEpisode($episode, $show, $season, $folder_path);
         }
 
         return $season;

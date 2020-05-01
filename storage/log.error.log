@@ -1,0 +1,12 @@
+2020/04/25 15:32:12 [error] 31898#31898: *60 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function php_info() in /home/patrick/airflix/public/phpinfo.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/patrick/airflix/public/phpinfo.php on line 2" while reading response header from upstream, client: 74.12.219.7, server: airflix.test, request: "GET /phpinfo.php HTTP/1.1", upstream: "fastcgi://unix:/etc/alternatives/php-fpm.sock:", host: "airflix.test"
+2020/04/25 19:04:54 [error] 1391#1391: *26 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function php_info() in /home/patrick/airflix/public/phpinfo.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/patrick/airflix/public/phpinfo.php on line 2" while reading response header from upstream, client: 74.12.219.7, server: airflix.test, request: "GET /phpinfo.php HTTP/1.1", upstream: "fastcgi://unix:/etc/alternatives/php-fpm.sock:", host: "airflix.test"
+2020/04/25 19:20:40 [error] 4504#4504: *37 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function php_info() in /home/patrick/airflix/public/phpinfo.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/patrick/airflix/public/phpinfo.php on line 2" while reading response header from upstream, client: 74.12.219.7, server: airflix.test, request: "GET /phpinfo.php HTTP/1.1", upstream: "fastcgi://unix:/run/php/php7.4-fpm.sock:", host: "airflix.test"

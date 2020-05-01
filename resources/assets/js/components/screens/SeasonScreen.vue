@@ -36,7 +36,7 @@
     </h2>
 
     <ul class="summaries" v-if="season.relationships.episodes">
-      <episode v-for="episode in episodes" 
+      <episode v-for="episode in episodes" v-bind:key="episode.id"
           :episode="episode">    
       </episode>
     </ul>

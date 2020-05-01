@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFailedJobsTable extends Migration
+class PatrickAddFilename extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +13,7 @@ class CreateFailedJobsTable extends Migration
      */
     public function up()
     {
-        Schema::table('movies', function($table) {
-            $table->string('file_name');
-        });
+        //
     }
 
     /**
@@ -24,6 +23,6 @@ class CreateFailedJobsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('file_name');
+        //
     }
 }

@@ -156,6 +156,7 @@ return [
         Laravel\Tinker\TinkerServiceProvider::class,
         Mpociot\LaravelTestFactoryHelper\TestFactoryHelperServiceProvider::class,
         Tmdb\Laravel\TmdbServiceProvider::class,
+        musa11971\TVDB\TVDBServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -216,6 +217,7 @@ return [
         // Package Facades...
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
         'Tmdb' => Tmdb\Laravel\Facades\Tmdb::class,
+        'TVDB' => musa11971\TVDB\TVDB::class,
 
     ],
 

@@ -8,7 +8,7 @@ interface Shows
     public function get($id, $relationships, $query);
     public function patch($id, $input);
     public function updateTotalViews($show);
-    public function refreshShow($show, $tmdbShowId, $useDefaults);
+    public function refreshShow($show, $tmdbShowId, $useDefaults, $folder_path);
     public function refreshShows($onlyNewFolders);
     public function truncate();
 }

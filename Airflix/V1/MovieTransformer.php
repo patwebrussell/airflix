@@ -36,6 +36,14 @@ class MovieTransformer
     public function transform($movie)
     {
         setlocale(LC_MONETARY, 'en_US.UTF-8');
+        $path_parts = pathinfo($movie->folder_path);
+
+        // PAT: the has_file is broken and returns false
+        if (file_exists($movie->folder_path)&&$path_parts['extension']=="mp4"){
+            $exists = true;
+        }else{
+            $exists = false;
+        }
 
         return [
             'id' => $movie->uuid,
@@ -51,14 +59,14 @@ class MovieTransformer
             'popularity' => (double) $movie->popularity,
             'release_date' => $movie->release_date ?
                 $movie->release_date->toIso8601String() : null,
-            'budget' => money_format('%.0n', $movie->budget),
-            'revenue' => money_format('%.0n', $movie->revenue),
+            'budget' => '$'.number_format($movie->budget, '2'),
+            'budget' => '$'.number_format($movie->revenue, '2'),
             'total_views' => (int) $movie->total_views,
             'tmdb_url' => config('airflix.urls.tmdb.movie').
                 $movie->tmdb_movie_id,
             'imdb_url' => $movie->imdb_id ?
                 config('airflix.urls.imdb').$movie->imdb_id : null,
-            'has_file' => (bool) $movie->has_file,
+            'has_file' => $exists,//(bool) $movie->has_file,
         ];
     }
 

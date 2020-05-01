@@ -36,16 +36,22 @@ class MovieDownloadController extends Controller
      */
     public function show($id)
     {
-        $movie = $this->movies()
-            ->get($id);
+        $movie = $this->movies()->get($id);
 
-        if (! $movie->has_file) {
+        /*if (! $movie->has_file) {
+            return abort(404);
+        }*/
+
+        // PAT: Check if the file is reachable
+        if (!file_exists($movie->folder_path)){
             return abort(404);
         }
 
-        $this->views()
-            ->watch($movie);
+        $this->views()->watch($movie);
+
+        $stream_link = explode('public/downloads', $movie->folder_path);
         
-        return redirect($movie->file_path);
+        // PAT: TO-DO will need a better way of serving the movie (HTML5)
+        return redirect('downloads'.$stream_link[1]);
     }
 }

@@ -34,6 +34,7 @@ class Episode extends Model
         'overview',
         'still_path',
         'air_date',
+        'folder_path',
     ];
 
     /**

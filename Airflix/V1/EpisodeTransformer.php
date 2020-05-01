@@ -33,6 +33,14 @@ class EpisodeTransformer
      */
     public function transform($episode)
     {
+        $path_parts = pathinfo($episode->folder_path);
+
+        if (file_exists($episode->folder_path)&&$path_parts['extension']=="mp4"){
+            $exists = true;
+        }else{
+            $exists = false;
+        }
+
         return [
             'id' => $episode->uuid,
             'show_id' => $episode->show_uuid,
@@ -45,7 +53,8 @@ class EpisodeTransformer
             'air_date' => $episode->air_date ?
                 $episode->air_date->toIso8601String() : null,
             'total_views' => (int) $episode->total_views,
-            'has_file' => (bool) $episode->has_file,
+            'has_file' => $exists,
+            'folder_path' => $episode->folder_path,
         ];
     }
 

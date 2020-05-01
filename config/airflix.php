@@ -31,7 +31,7 @@ return [
             'seasons' => 320,
             'episodes' => 480,
         ],
-        'throttle_seconds' => 10,
+        'throttle_seconds' => 60,
     ],
 
     'urls' => [

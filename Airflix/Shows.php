@@ -200,8 +200,9 @@ class Shows implements Contracts\Shows
      *
      * @return \Airflix\Show
      */
-    public function refreshShow($show, $tmdbShowId, $useDefaults = false)
+    public function refreshShow($show, $tmdbShowId, $useDefaults = false, $folder_path)
     {
+        
         // Remove links to old Seasons and Episodes
         if ($tmdbShowId != $show->tmdb_show_id) {
             $show->seasons()
@@ -214,6 +215,7 @@ class Shows implements Contracts\Shows
                 ->update([
                     'show_id' => 0,
                     'show_uuid' => null,
+                    'folder_path' => $folder_path,
                 ]);
 
             $show->views()
@@ -294,9 +296,7 @@ class Shows implements Contracts\Shows
 
         foreach ($result['seasons'] as $season) {
             $seasonNumber = $season['season_number'];
-
-            $season = $this->seasons()
-                ->refreshSeason($seasonNumber, $show);
+            $season = $this->seasons()->refreshSeason($seasonNumber, $show, $folder_path);
         }
 
         return $show;
@@ -313,13 +313,14 @@ class Shows implements Contracts\Shows
     public function refreshShows($onlyNewFolders = false, $output = null) {
         $imageClient = new TmdbImageClient;
 
-        $folderPaths = collect(
-            Storage::disk('public')
-                ->directories('downloads/episodes')
+        // PAT: Get all files recursivly
+        $Directory = new \RecursiveDirectoryIterator(
+            public_path('downloads/episodes')
         );
+        $iterator = new \RecursiveIteratorIterator($Directory);
+        $folderPaths = iterator_to_array($iterator, true);
 
-        Show::whereNotIn('folder_path', $folderPaths)
-            ->delete();
+        Show::whereNotIn('folder_path', $folderPaths)->delete();
 
         // Only refresh new folders
         if ($onlyNewFolders) {
@@ -335,46 +336,100 @@ class Shows implements Contracts\Shows
         
         // Create the progress bar
         if($output) {
-            $bar = $output->createProgressBar($folderPaths->count());
+            $bar = $output->createProgressBar(count($folderPaths));
             $bar->setFormat('verbose');
         }
 
         foreach ($folderPaths as $folderPath) {
-            $folderName = last(
-                (array) array_filter(
-                    explode('/', $folderPath), 'strlen'
-                )
-            );
 
-            // Ignore hidden directories
-            if (starts_with($folderName, '.')) {
+            $path_parts = pathinfo($folderPath);
+
+            // PAT: Ignore all folders with out a valide extenssion
+            $extList =  env("AIRFLIX_EXTENSIONS_VIDEO", "m4v, mp4, mkv");
+            $extList = explode(', ', $extList );
+            $found =0;
+            foreach($extList as $ext){
+                if (strstr($folderPath, $ext)) {
+                    $found=1;
+                }
+            }
+            if ($found==0){
                 continue;
             }
 
-            $show = Show::firstOrCreate([
-                'folder_name' => $folderName,
-                'folder_path' => $folderPath,
-            ]);
+            // Convert/Skip files that are not mp4
+            /*if ($path_parts['extension']!="mp4"){
+                $folderPath_new = $path_parts['dirname']."/".$path_parts['filename'].".mp4";
+                if (file_exists($folderPath_new)){
+                    continue;
+                }else{
+                    dump("\nffmpeg: (".$path_parts['filename'].") ".$path_parts['extension']." -> mp4 ");
+                    exec("sudo ffmpeg -v quiet -stats -i \"$folderPath\" -c:v copy -c:a aac \"".$path_parts['dirname']."/".$path_parts['filename'].".mp4\"");
+                    //exec("sudo rm $folderPath");
+                    dump("\n".$path_parts['filename'].".".$path_parts['extension']." was deleted"."\n");
+                    $folderPath = $folderPath_new;
+                    $path_parts = pathinfo($folderPath);
+                }
+            }*/
 
+            // PAT: Get fileName and extract show name, season and episode
+            $fileName = basename($folderPath); 
+
+            if (preg_match("'^(.+)\.S([0-9]+)E([0-9]+).*$'i",$fileName,$n))
+            {
+                $name = preg_replace("'\.'"," ",$n[1]);
+                $season = str_pad(intval($n[2],10), 2, '0', STR_PAD_LEFT); 
+                $episode = str_pad(intval($n[3],10), 2, '0', STR_PAD_LEFT); 
+            }
+
+            if (!isset($name)||!isset($season)||!isset($episode)){
+                continue;
+            }
+
+            $folderPathex = explode('downloads/episodes/', $folderPath);
+            $folderName = str_replace($fileName, '', $folderPathex[1]);
+            
             // Remove year, such as '(2016)', from folder name for search
-            $searchName = trim(preg_replace('/\((\d+)\)/', '', $folderName));
+            $searchName = trim(
+                preg_replace('/\((\d+)\)/', '', $name)
+            );
 
-            // Search for results by folder name
-            $query = $this->retry(3,
+            // PAT: Remove [stuff], from folder name for search
+            $searchName = trim(
+                preg_replace('(\\[.*?\\])', '', $searchName)
+            );
+
+            // PAT: we skip if name is empty for some weird reason
+            if ($searchName==""||$searchName==null) {
+                continue;
+            }
+            $show = Show::firstOrCreate([
+                'name' => $name,
+            ]);
+            $show->file_name = $fileName;
+            $show->folder_path = $folderPath;
+            $show->folder_name = $folderName;
+            $show->name = $searchName;
+
+            // PAT: Search for results by file name
+            $query = $this->retry(10,
                 function () use ($searchName) {
                     return Tmdb::getSearchApi()
                         ->searchTv($searchName);
                 }, function () {
                     sleep(config('airflix.tmdb.throttle_seconds'));
-                });
+                }
+            );
 
             $totalResults = $query['total_results'];
+
+            $nomatch=0;
 
             foreach ($query['results'] as $queryShow) {
                 $tmdbShowId = $queryShow['id'];
 
                 $attributes = [
-                    $folderName,
+                    $name,
                     $show,
                     $queryShow,
                     $totalResults,
@@ -382,15 +437,15 @@ class Shows implements Contracts\Shows
                 ];
 
                 if ($this->hasMatch($attributes)) {
-                    $show = $this->refreshShow($show, $tmdbShowId);
-
+                    $show = $this->refreshShow($show, $tmdbShowId, false, $folderPath);
+                    $nomatch=1;
                     break;
                 }
             }
 
             // If no result could be matched
-            if ($show->name == null) {
-                $show->name = $folderName;
+            if ($nomatch==0) {
+                $show->name = $searchName;
                 $show->save();
             }
 
@@ -406,7 +461,7 @@ class Shows implements Contracts\Shows
             $bar->clear();
         }
 
-        return $folderPaths->count();
+        return count($folderPaths);
     }
 
     /**
@@ -426,13 +481,18 @@ class Shows implements Contracts\Shows
             $tmdbShowId
         ) = $attributes;
 
-        $firstAirDate = new Carbon($queryShow['first_air_date']);
+        if (isset($queryShow['first_air_date'])){
+            $firstAirDate = new Carbon($queryShow['first_air_date']);
+            $firstAirDate = $firstAirDate->year;
+        }else{
+            $firstAirDate = '-';
+        }
 
         // Remove colons and periods from the name
         $name = preg_replace('/[\:\.]/', '', $queryShow['name']);
 
         // Add back the year, such as '(2016)', to the name
-        $nameWithYear = $name.' ('.$firstAirDate->year.')';
+        $nameWithYear = $name.' ('.$firstAirDate.')';
 
         return $totalResults == 1 ||
             $folderName == $name ||

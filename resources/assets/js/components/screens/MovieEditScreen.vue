@@ -28,9 +28,9 @@
           </div>
         </li>
         <li>
-          <div class="key">Folder Name:</div>
+          <div class="key">File Name:</div>
           <div class="value">
-            {{ movie.attributes.folder_name }}
+            {{ movie.attributes.file_name }}
           </div>
         </li>
       </ul>
@@ -68,9 +68,9 @@
       </p>
       <ul class="tags">
         <li>
-          <div class="key">Folder Name:</div>
+          <div class="key">File Name:</div>
           <div class="value">
-            {{ movie.attributes.folder_name }}
+            {{ movie.attributes.file_name }}
           </div>
         </li>
       </ul>

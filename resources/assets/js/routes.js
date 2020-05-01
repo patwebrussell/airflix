@@ -8,15 +8,18 @@ import ShowScreen from './components/screens/ShowScreen.vue'
 import ShowEditScreen from './components/screens/ShowEditScreen.vue'
 import SeasonScreen from './components/screens/SeasonScreen.vue'
 import NotFoundScreen from './components/screens/NotFoundScreen.vue'
+import PlayerScreen from './components/screens/PlayerScreen.vue'
   
 export const routes = [
   { path: '/', redirect: '/movies' },
   { path: '/movies', component: MoviesScreen },
   { path: '/movies/:id', component: MovieScreen },
+  { path: '/movies/player/:id', component: PlayerScreen },
   { path: '/movies/:id/edit', component: MovieEditScreen },
   { path: '/settings', component: SettingsScreen },
   { path: '/shows', component: ShowsScreen },
   { path: '/shows/:id', component: ShowScreen },
+  { path: '/shows/player/:id', component: PlayerScreen },
   { path: '/shows/:id/edit', component: ShowEditScreen },
   { path: '/shows/seasons/:id', component: SeasonScreen },
   // Not Found Handler

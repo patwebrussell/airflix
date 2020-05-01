@@ -7,6 +7,9 @@ use DB;
 use Storage;
 use Tmdb;
 
+use Airflix\Contracts\Settings;
+use Illuminate\Console\Command;
+
 class Movies implements Contracts\Movies
 {
     use Retriable;
@@ -266,13 +269,15 @@ class Movies implements Contracts\Movies
      */
     public function refreshMovies($onlyNewFolders = false, $output = null)
     {
-        $folderPaths = collect(
-            Storage::disk('public')
-                ->directories('downloads/movies')
-        );
 
-        Movie::whereNotIn('folder_path', $folderPaths)
-            ->delete();
+        // PAT: Get all files recursivly
+        $Directory = new \RecursiveDirectoryIterator(
+            public_path('downloads/movies')
+        );
+        $iterator = new \RecursiveIteratorIterator($Directory);
+        $folderPaths = iterator_to_array($iterator, true);
+
+        Movie::whereNotIn('folder_path', $folderPaths)->delete();
 
         // Only refresh new folders
         if ($onlyNewFolders) {
@@ -287,48 +292,75 @@ class Movies implements Contracts\Movies
         $bar = null;
 
         if($output) {
-            $bar = $output->createProgressBar($folderPaths->count());
+            $bar = $output->createProgressBar(count($folderPaths));
             $bar->setFormat('verbose');
         }
 
         foreach ($folderPaths as $folderPath) {
-            $folderName = last(
-                (array) array_filter(
-                    explode('/', $folderPath), 'strlen'
-                )
+
+            // PAT: Ignore all folders with out a valide extenssion
+            $extList =  env("AIRFLIX_EXTENSIONS_VIDEO", "m4v, mp4, mkv");
+            $extList = explode(', ', $extList );
+            $found =0;
+            foreach($extList as $ext){
+                if (strstr($folderPath, $ext)) {
+                    $found=1;
+                }
+            }
+            if ($found==0){
+                continue;
+            }
+
+            // PAT: Get fileName and use that for TMDB as well as folderPath and folderName
+            $fileName = basename($folderPath); 
+            $folderPathex = explode('downloads/movies/', $folderPath);
+            $folderName = str_replace($fileName, '', $folderPathex[1]);
+
+            // PAT: Get the file name from the path
+            $path_parts = pathinfo($folderPath);
+            $searchName = $path_parts['filename'];
+
+            // PAT: Use the filname not the folder name
+            // Remove year, such as '(2016)', from folder name for search
+            $searchName = trim(
+                preg_replace('/\((\d+)\)/', '', $searchName)
             );
 
-            // Ignore hidden directories
-            if (starts_with($folderName, '.')) {
+            // PAT: Remove [stuff], from folder name for search
+            $searchName = trim(
+                preg_replace('(\\[.*?\\])', '', $searchName)
+            );
+
+            // PAT: we skip if name is empty for some weird reason
+            if ($searchName=="") {
                 continue;
             }
 
             $movie = Movie::firstOrCreate([
-                'folder_name' => $folderName,
                 'folder_path' => $folderPath,
             ]);
+            $movie->file_name = $fileName;
+            $movie->folder_name = $folderName;
+            $movie->title = $searchName;
 
-            // Remove year, such as '(2016)', from folder name for search
-            $searchName = trim(
-                preg_replace('/\((\d+)\)/', '', $folderName)
-            );
-
-            // Search for results by folder name
-            $query = $this->retry(3,
+            // PAT: Search for results by file name
+            $query = $this->retry(10,
                 function () use ($searchName) {
                     return Tmdb::getSearchApi()
                         ->searchMovies($searchName);
                 }, function () {
                     sleep(config('airflix.tmdb.throttle_seconds'));
-                });
+                }
+            );
 
             $totalResults = $query['total_results'];
+            $found = 0;
 
             foreach ($query['results'] as $queryMovie) {
                 $tmdbMovieId = $queryMovie['id'];
 
                 $attributes = [
-                    $folderName,
+                    $searchName,
                     $movie,
                     $queryMovie,
                     $totalResults,
@@ -339,14 +371,15 @@ class Movies implements Contracts\Movies
                     $movie = $this->refreshMovie(
                         $movie, $tmdbMovieId
                     );
-
+                    $found=1;
                     break;
                 }
             }
 
-            // If no result could be matched
-            if ($movie->title == null) {
-                $movie->title = $folderName;
+            if ($found=="0"){
+                $movie->file_name = $fileName;
+                $movie->title = $searchName;
+                $movie->folder_name = $folderName;
                 $movie->save();
             }
 
@@ -354,6 +387,7 @@ class Movies implements Contracts\Movies
             if($bar) {
                 $bar->advance();
             }
+
         }
 
         // Finish and clear the progress bar
@@ -362,7 +396,7 @@ class Movies implements Contracts\Movies
             $bar->clear();
         }
 
-        return $folderPaths->count();
+        return count($folderPaths);
     }
 
     /**
@@ -375,24 +409,33 @@ class Movies implements Contracts\Movies
     protected function hasMatch($attributes)
     {
         list(
-            $folderName,
+            $Name,
             $movie,
             $queryMovie,
             $totalResults,
             $tmdbMovieId
         ) = $attributes;
 
-        $releaseDate = new Carbon($queryMovie['release_date']);
+        // PAT: Check the value before using it if not use '-' as the date to avoid crash
+        // PAT: Use $releaseDate as a string not an object to avoid crash if undefined
+        if (isset($queryMovie['release_date'])){
+            $releaseDate = new Carbon($queryMovie['release_date']);
+            $releaseDate = $releaseDate->year;
+        }else{
+            // PAT: No release date provided
+            $releaseDate ='-';
+        }
 
         // Remove colons and periods from the title
         $title = preg_replace('/[\:\.]/', '', $queryMovie['title']);
 
+        // PAT: Using $releaseDate instead of $releaseDate->year
         // Add back the year, such as '(2016)', to the title
-        $titleWithYear = $title.' ('.$releaseDate->year.')';
+        $titleWithYear = $title.' ('.$releaseDate.')';
 
         return $totalResults == 1 ||
-            $folderName == $title ||
-            $folderName == $titleWithYear ||
+            $Name == $title ||
+            $Name == $titleWithYear ||
             $movie->tmdb_movie_id == $tmdbMovieId;
     }
 

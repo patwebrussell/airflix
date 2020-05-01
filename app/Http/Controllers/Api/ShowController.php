@@ -67,6 +67,7 @@ class ShowController extends ApiController
         $show = $this->shows()
             ->get($id, $relationships);
 
+
         $transformer = $this->shows()
             ->transformer();
 

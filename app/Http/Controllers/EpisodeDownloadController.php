@@ -36,18 +36,22 @@ class EpisodeDownloadController extends Controller
      */
     public function show($id)
     {
-        $relationships = ['show',];
 
-        $episode = $this->episodes()
-            ->get($id, $relationships);
+        $episode = $this->episodes()->get($id);
 
-        if (! $episode->has_file) {
-            return abort(404);
-        }
-
-        $this->views()
-            ->watch($episode);
+    
+        $this->views()->watch($episode);
         
-        return redirect($episode->file_path);
+        $stream_link = explode('public/downloads', $episode->folder_path);
+        $folder['fold_path'] = $stream_link;
+
+        // PAT: TO-DO will need a better way of serving the movie (HTML5)
+
+        //return json_encode($folder);
+        return redirect('shows/player/'.$id);
+        //return redirect('downloads'.$stream_link[1]);
     }
 }
+
+
+

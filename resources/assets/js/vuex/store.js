@@ -12,6 +12,7 @@ import settings from './modules/settings'
 import shows from './modules/shows'
 import toasts from './modules/toasts'
 import views from './modules/views'
+import player from './modules/player'
 
 Vue.use(Vuex)
 
@@ -28,7 +29,8 @@ export default new Vuex.Store({
     settings,
     shows,
     toasts,
-    views
+    views,
+    player
   },
   strict: process.env.NODE_ENV !== 'production'
 })

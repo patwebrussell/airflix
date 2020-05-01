@@ -77,7 +77,7 @@ class Episodes implements Contracts\Episodes
      *
      * @return \Airflix\Episode
      */
-    public function refreshEpisode($result, $show, $season)
+    public function refreshEpisode($result, $show, $season, $folder_path)
     {
         $episode = Episode::firstOrNew([
             'tmdb_episode_id' => $result['id'],
@@ -87,7 +87,7 @@ class Episodes implements Contracts\Episodes
         $episode->season_id = $season->id;
         $episode->show_uuid = $show->uuid;
         $episode->season_uuid = $season->uuid;
-
+        $episode->folder_path = $folder_path;
         $episode->save();
 
         $episode->update(array_merge($result, [

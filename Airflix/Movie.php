@@ -112,8 +112,7 @@ class Movie extends Model
      */
     public function getFileNameAttribute()
     {
-        return $this->folder_name.'.'.
-            $this->getFileExtension();
+        return $this->file_name;
     }
 
     /**
@@ -135,8 +134,7 @@ class Movie extends Model
      */
     public function getHasFileAttribute()
     {
-        return Storage::disk('public')
-            ->exists($this->file_path);
+        return $this->file_path;
     }
 
     /**
@@ -146,18 +144,8 @@ class Movie extends Model
      */
     protected function getFileExtension()
     {
-        $filePath = '/downloads/movies/'.
-                $this->folder_name.'/'.
-                $this->folder_name.'.';
-
-        foreach(config('airflix.extensions.video') as $extension)
-        {
-            if(Storage::disk('public')->exists($filePath.$extension)) {
-                return $extension;
-            }
-        }
-
-        return 'm4v';
+        $path_parts = pathinfo($this->folder_path);
+        return $path_parts['extension'];
     }
 
     /**

@@ -16,7 +16,7 @@ import { sync } from 'vuex-router-sync'
 import App from './components/App.vue'
 
 // Devtools enabled
-Vue.config.devtools = false
+Vue.config.devtools = true
 
 // Silence logs and warnings
 Vue.config.silent = true
