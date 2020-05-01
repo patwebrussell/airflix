@@ -6,6 +6,7 @@ use Airflix\Contracts\ApiResponse;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -32,7 +33,7 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         return parent::report($e);
     }
@@ -45,7 +46,7 @@ class Handler extends ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
         if ($request->ajax()) {
             return $this->apiResponse()
